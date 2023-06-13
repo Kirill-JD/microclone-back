@@ -21,4 +21,9 @@ public class ProjectRepositoryAdapter implements ProjectRepository {
     public void save(Project project) {
         projectJpaRepository.save(project);
     }
+
+    @Override
+    public Project findProjectById(Long id) {
+        return projectJpaRepository.findProjectById(id);
+    }
 }

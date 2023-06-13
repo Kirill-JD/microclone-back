@@ -25,16 +25,21 @@ CREATE TABLE users_role
 CREATE TABLE project
 (
     id                  NUMBER PRIMARY KEY,
-    project_id          VARCHAR,
     sentry_key          VARCHAR,
     sentry_version      VARCHAR,
-    sentry_client       VARCHAR,
+    sentry_client       VARCHAR
+);
+
+CREATE TABLE problem
+(
+    id                  NUMBER PRIMARY KEY,
+    project_id          NUMBER NOT NULL,
     event               VARCHAR,
     type                VARCHAR,
     detail              VARCHAR
 );
 
-CREATE SEQUENCE sq_project_id START WITH 1 INCREMENT BY 1;
+CREATE SEQUENCE sq_problem_id START WITH 1 INCREMENT BY 1;
 
 INSERT INTO role VALUES (next value for sq_role_id, 'ROLE_ADMIN');
 INSERT INTO role VALUES (next value for sq_role_id, 'ROLE_USER');
