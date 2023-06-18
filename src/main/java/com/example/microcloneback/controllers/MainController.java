@@ -6,12 +6,21 @@ import com.example.microcloneback.model.project.Problem;
 import com.example.microcloneback.model.project.Project;
 import com.example.microcloneback.service.ProblemService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.Map;
+import java.util.zip.GZIPInputStream;
 
+@Slf4j
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
@@ -34,16 +43,27 @@ public class MainController {
     }
 
     @CrossOrigin(origins = "*")
-    @PostMapping("/{project_id}/envelope/")
-    public ResponseEntity<String> postSentryLog(@PathVariable("project_id") Long projectId,
-                                                @RequestParam("sentry_key") String sentryKey,
-                                                @RequestParam("sentry_version") String sentryVersion,
-                                                @RequestParam("sentry_client") String sentryClient,
-                                                @RequestBody String body) {
+    @PostMapping(value = "/{project_id}/envelope/", params = {"sentry_key", "sentry_version", "sentry_client"})
+    public ResponseEntity<String> vueSentryLog(@PathVariable("project_id") Long projectId,
+                                               @RequestParam("sentry_key") String sentryKey,
+                                               @RequestParam("sentry_version") String sentryVersion,
+                                               @RequestParam("sentry_client") String sentryClient,
+                                               @RequestBody String body) {
         System.out.println("------------------------------------ start ------------------------------------");
         System.out.println(body);
         System.out.println("sentryKey: " + sentryKey + "; sentryVersion: " + sentryVersion + "; sentryClient: " + sentryClient);
         problemService.setProblem(sentryKey, sentryVersion, sentryClient, body, projectId);
+        return ResponseEntity.status(HttpStatus.OK).body("ok");
+    }
+
+    @CrossOrigin(origins = "*")
+    @PostMapping(value = "/{project_id}/envelope/")
+    public ResponseEntity<String> springSentryLog(@PathVariable("project_id") Long projectId,
+                                                  @RequestHeader("x-sentry-auth") String header,
+                                                  @RequestBody byte[] body) {
+        System.out.println("------------------------------------ start ------------------------------------");
+        System.out.println(header);
+        problemService.setProblem(header, body, projectId);
         return ResponseEntity.status(HttpStatus.OK).body("ok");
     }
 }

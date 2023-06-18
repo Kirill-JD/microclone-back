@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.example</groupId>
-	<artifactId>microclon-back</artifactId>
+	<artifactId>microclone-back</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>microclon-back</name>
+	<name>microclone-back</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>
 		<java.version>17</java.version>
@@ -60,6 +60,11 @@
 			<artifactId>json</artifactId>
 			<version>20220924</version>
 		</dependency>
+<!--		<dependency>-->
+<!--			<groupId>org.zalando</groupId>-->
+<!--			<artifactId>logbook-spring-boot-starter</artifactId>-->
+<!--			<version>3.0.0</version>-->
+<!--		</dependency>-->
 	</dependencies>
 
 	<build>
