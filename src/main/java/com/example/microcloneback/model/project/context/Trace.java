@@ -1,6 +1,5 @@
 package com.example.microcloneback.model.project.context;
 
-import com.example.microcloneback.model.project.Problem;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;

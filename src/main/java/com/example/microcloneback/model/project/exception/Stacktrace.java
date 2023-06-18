@@ -1,6 +1,5 @@
 package com.example.microcloneback.model.project.exception;
 
-import com.example.microcloneback.model.project.context.Contexts;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.Hibernate;
