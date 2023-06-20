@@ -20,10 +20,18 @@ public class Runtime {
     private String version;
     private String build;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @MapsId
     @JoinColumn(name = "contexts_id")
+    @ToString.Exclude
     private Contexts contexts;
+
+    public Runtime(String name, String version, String build, Contexts contexts) {
+        this.name = name;
+        this.version = version;
+        this.build = build;
+        this.contexts = contexts;
+    }
 
     @Override
     public boolean equals(Object o) {

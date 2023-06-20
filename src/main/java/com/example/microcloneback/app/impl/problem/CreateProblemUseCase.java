@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 public class CreateProblemUseCase implements CreateProblemInbound {
     private final ProblemRepository problemRepository;
     @Override
-    public void execute(Problem problem) {
-        problemRepository.save(problem);
+    public Problem execute(Problem problem) {
+        return problemRepository.save(problem);
     }
 }

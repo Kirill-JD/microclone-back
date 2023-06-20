@@ -20,17 +20,19 @@ import java.util.Objects;
 @Entity
 public class Frame {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "frame_id_generator")
+    @SequenceGenerator(name = "frame_id_generator", sequenceName = "sq_frame_id", allocationSize = 1)
     private Long id;
     private String filename;
     private String function;
+    @Column(name = "modules")
     private String module;
     private Long lineno;
     @Column(name = "native")
     @JsonProperty("native")
     private Boolean natural;
     @JsonProperty("in_app")
+    @Column(name = "in_app")
     private Boolean inApp;
 
     @ManyToOne
@@ -41,6 +43,16 @@ public class Frame {
     @JsonProperty("stacktraceId")
     @ToString.Exclude
     private Stacktrace stacktrace;
+
+    public Frame(String filename, String function, String module, Long lineno, Boolean natural, Boolean inApp, Stacktrace stacktrace) {
+        this.filename = filename;
+        this.function = function;
+        this.module = module;
+        this.lineno = lineno;
+        this.natural = natural;
+        this.inApp = inApp;
+        this.stacktrace = stacktrace;
+    }
 
     @Override
     public boolean equals(Object o) {

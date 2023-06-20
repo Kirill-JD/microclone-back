@@ -2,6 +2,7 @@ package com.example.microcloneback.model.project;
 
 import com.example.microcloneback.model.project.context.Contexts;
 import com.example.microcloneback.model.project.exception.Exception;
+import com.example.microcloneback.model.project.sdk.Sdk;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -27,12 +28,14 @@ public class Problem {
     @SequenceGenerator(name = "problem_id_generator", sequenceName = "sq_problem_id", allocationSize = 1)
     private Long id;
     @Column(name = "event_id")
-    @JsonProperty("eventId")
+    @JsonProperty("event_id")
     private String eventId;
     private String platform;
     private String environment;
     private String type;
+    @Column(name = "timestamps")
     private String timestamp;
+    @Column(name = "levels")
     private String level;
 
     @OneToOne(mappedBy = "problem", cascade = CascadeType.ALL)
@@ -40,6 +43,7 @@ public class Problem {
     private Sdk sdk;
     @OneToOne(mappedBy = "problem", cascade = CascadeType.ALL)
     @PrimaryKeyJoinColumn
+    @JsonProperty("exception")
     private Exception exception;
     @OneToOne(mappedBy = "problem", cascade = CascadeType.ALL)
     @PrimaryKeyJoinColumn
@@ -64,12 +68,28 @@ public class Problem {
     @Column(name = "module_value")
     private Map<String, String> modules;
 
-//    public Problem(String eventId, String type, String detail, Project project) {
-//        this.eventId = eventId;
-//        this.type = type;
-//        this.detail = detail;
-//        this.project = project;
-//    }
+    public Problem(String eventId, String platform, String environment, String type, String timestamp, String level, Sdk sdk, Exception exception, Request request, Contexts contexts, Project project, Map<String, String> modules) {
+        this.eventId = eventId;
+        this.platform = platform;
+        this.environment = environment;
+        this.type = type;
+        this.timestamp = timestamp;
+        this.level = level;
+        this.sdk = sdk;
+        this.exception = exception;
+        this.request = request;
+        this.contexts = contexts;
+        this.project = project;
+        this.modules = modules;
+        setProblemInParam();
+    }
+
+    public void setProblemInParam() {
+        this.contexts.setProblem(this);
+        this.sdk.setProblem(this);
+        this.exception.setProblem(this);
+        this.request.setProblem(this);
+    }
 
     @Override
     public boolean equals(Object o) {

@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.Hibernate;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -13,6 +15,7 @@ import java.util.Objects;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "exceptions")
 public class Exception {
     @Id
     @Column(name = "problem_id")
@@ -21,7 +24,16 @@ public class Exception {
     @OneToOne
     @MapsId
     @JoinColumn(name = "problem_id")
+    @ToString.Exclude
     private Problem problem;
+
+    @OneToMany(mappedBy = "exception", cascade = CascadeType.ALL, orphanRemoval = true)
+    @ToString.Exclude
+    private List<Value> values = new ArrayList<>();
+
+    public Exception(Problem problem) {
+        this.problem = problem;
+    }
 
     @Override
     public boolean equals(Object o) {

@@ -5,20 +5,14 @@ import com.example.microcloneback.app.api.project.FindAllProjectInbound;
 import com.example.microcloneback.model.project.Problem;
 import com.example.microcloneback.model.project.Project;
 import com.example.microcloneback.service.ProblemService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
-import java.util.Map;
-import java.util.zip.GZIPInputStream;
 
 @Slf4j
 @RestController
@@ -52,7 +46,11 @@ public class MainController {
         System.out.println("------------------------------------ start ------------------------------------");
         System.out.println(body);
         System.out.println("sentryKey: " + sentryKey + "; sentryVersion: " + sentryVersion + "; sentryClient: " + sentryClient);
-        problemService.setProblem(sentryKey, sentryVersion, sentryClient, body, projectId);
+        try {
+            problemService.setProblem(sentryKey, sentryVersion, sentryClient, body, projectId);
+        } catch (JsonProcessingException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("bad");
+        }
         return ResponseEntity.status(HttpStatus.OK).body("ok");
     }
 
@@ -60,7 +58,7 @@ public class MainController {
     @PostMapping(value = "/{project_id}/envelope/")
     public ResponseEntity<String> springSentryLog(@PathVariable("project_id") Long projectId,
                                                   @RequestHeader("x-sentry-auth") String header,
-                                                  @RequestBody byte[] body) {
+                                                  @RequestBody byte[] body) throws JsonProcessingException {
         System.out.println("------------------------------------ start ------------------------------------");
         System.out.println(header);
         problemService.setProblem(header, body, projectId);

@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.Hibernate;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Getter
@@ -17,10 +19,19 @@ public class Stacktrace {
     @Column(name = "value_id")
     private Long id;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @MapsId
     @JoinColumn(name = "value_id")
+    @ToString.Exclude
     private Value value;
+
+    @OneToMany(mappedBy = "stacktrace", cascade = CascadeType.ALL, orphanRemoval = true)
+    @ToString.Exclude
+    List<Frame> frames = new ArrayList<>();
+
+    public Stacktrace(Value value) {
+        this.value = value;
+    }
 
     @Override
     public boolean equals(Object o) {

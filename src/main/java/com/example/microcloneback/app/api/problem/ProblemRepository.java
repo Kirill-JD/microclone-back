@@ -6,6 +6,6 @@ import java.util.List;
 
 public interface ProblemRepository {
     List<Problem> findAll();
-    void save(Problem problem);
+    Problem save(Problem problem);
     List<Problem> findAllProblemByProjectId(Long id);
 }

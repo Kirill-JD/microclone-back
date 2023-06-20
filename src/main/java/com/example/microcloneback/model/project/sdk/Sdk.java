@@ -1,5 +1,6 @@
-package com.example.microcloneback.model.project;
+package com.example.microcloneback.model.project.sdk;
 
+import com.example.microcloneback.model.project.Problem;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.Hibernate;
@@ -21,15 +22,27 @@ public class Sdk {
     private String name;
     private String version;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @MapsId
     @JoinColumn(name = "problem_id")
+    @ToString.Exclude
     private Problem problem;
 
     @ElementCollection(targetClass = String.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "integrations", joinColumns = @JoinColumn(name = "sdk_id"))
     @Column(name = "integration", nullable = false)
     private List<String> integrations = new ArrayList<>();
+
+    @OneToMany(mappedBy = "sdk", cascade = CascadeType.ALL, orphanRemoval = true)
+    @ToString.Exclude
+    private List<Package> packages = new ArrayList<>();
+
+    public Sdk(String name, String version, Problem problem, List<String> integrations) {
+        this.name = name;
+        this.version = version;
+        this.problem = problem;
+        this.integrations = integrations;
+    }
 
     @Override
     public boolean equals(Object o) {

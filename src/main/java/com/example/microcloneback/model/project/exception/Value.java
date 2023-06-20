@@ -18,21 +18,27 @@ import java.util.Objects;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Table(name = "valuee")
 public class Value {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "value_id_generator")
+    @SequenceGenerator(name = "value_id_generator", sequenceName = "sq_value_id", allocationSize = 1)
     private Long id;
     private String type;
+    @Column(name = "valuee")
+    @JsonProperty("value")
     private String value;
+    @Column(name = "modules")
+    @JsonProperty("module")
     private String module;
     @JsonProperty("thread_id")
+    @Column(name = "thread_id")
     private Long threadId;
     @OneToOne(mappedBy = "value", cascade = CascadeType.ALL)
     @PrimaryKeyJoinColumn
     private Stacktrace stacktrace;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "exception_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
@@ -40,6 +46,19 @@ public class Value {
     @JsonProperty("exceptionId")
     @ToString.Exclude
     private Exception exception;
+
+    public Value(String type, String value, String module, Long threadId, Exception exception) {
+        this.type = type;
+        this.value = value;
+        this.module = module;
+        this.threadId = threadId;
+        this.exception = exception;
+        setValueInParam();
+    }
+
+    public void setValueInParam() {
+        this.stacktrace.setValue(this);
+    }
 
     @Override
     public boolean equals(Object o) {

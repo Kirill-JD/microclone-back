@@ -27,10 +27,18 @@ public class Request {
     @Column(name = "header_value")
     private Map<String, String> headers;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @MapsId
     @JoinColumn(name = "problem_id")
+    @ToString.Exclude
     private Problem problem;
+
+    public Request(String url, String method, Map<String, String> headers, Problem problem) {
+        this.url = url;
+        this.method = method;
+        this.headers = headers;
+        this.problem = problem;
+    }
 
     @Override
     public boolean equals(Object o) {

@@ -25,10 +25,22 @@ public class Contexts {
     @PrimaryKeyJoinColumn
     private Runtime runtime;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @MapsId
-    @JoinColumn(name = "problem_id")
+    @ToString.Exclude
     private Problem problem;
+
+    public Contexts(Trace trace, Runtime runtime, Problem problem) {
+        this.trace = trace;
+        this.runtime = runtime;
+        this.problem = problem;
+        setContextsInParam();
+    }
+
+    public void setContextsInParam() {
+        this.trace.setContexts(this);
+        this.runtime.setContexts(this);
+    }
 
     @Override
     public boolean equals(Object o) {

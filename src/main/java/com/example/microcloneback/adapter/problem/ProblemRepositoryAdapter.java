@@ -17,8 +17,8 @@ public class ProblemRepositoryAdapter implements ProblemRepository {
     }
 
     @Override
-    public void save(Problem problem) {
-        problemJpaRepository.save(problem);
+    public Problem save(Problem problem) {
+        return problemJpaRepository.save(problem);
     }
 
     @Override
