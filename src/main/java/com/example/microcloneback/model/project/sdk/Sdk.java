@@ -1,6 +1,7 @@
 package com.example.microcloneback.model.project.sdk;
 
 import com.example.microcloneback.model.project.Problem;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.Hibernate;
@@ -24,6 +25,7 @@ public class Sdk {
 
     @OneToOne(fetch = FetchType.LAZY)
     @MapsId
+    @JsonIgnore
     @JoinColumn(name = "problem_id")
     @ToString.Exclude
     private Problem problem;
@@ -42,6 +44,11 @@ public class Sdk {
         this.version = version;
         this.problem = problem;
         this.integrations = integrations;
+    }
+
+    public void setPackages(List<Package> packages) {
+        packages.forEach(p -> p.setSdk(this));
+        this.packages = packages;
     }
 
     @Override

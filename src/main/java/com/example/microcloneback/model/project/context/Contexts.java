@@ -1,6 +1,7 @@
 package com.example.microcloneback.model.project.context;
 
 import com.example.microcloneback.model.project.Problem;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.Hibernate;
@@ -27,6 +28,8 @@ public class Contexts {
 
     @OneToOne(fetch = FetchType.LAZY)
     @MapsId
+    @JsonIgnore
+    @JoinColumn(name = "problem_id")
     @ToString.Exclude
     private Problem problem;
 

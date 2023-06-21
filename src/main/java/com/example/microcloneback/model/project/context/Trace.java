@@ -1,5 +1,6 @@
 package com.example.microcloneback.model.project.context;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
@@ -31,6 +32,7 @@ public class Trace {
 
     @OneToOne(fetch = FetchType.LAZY)
     @MapsId
+    @JsonIgnore
     @JoinColumn(name = "contexts_id")
     @ToString.Exclude
     private Contexts contexts;

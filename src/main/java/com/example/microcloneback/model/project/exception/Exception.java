@@ -1,6 +1,7 @@
 package com.example.microcloneback.model.project.exception;
 
 import com.example.microcloneback.model.project.Problem;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.Hibernate;
@@ -18,12 +19,12 @@ import java.util.Objects;
 @Table(name = "exceptions")
 public class Exception {
     @Id
-    @Column(name = "problem_id")
     private Long id;
 
     @OneToOne
     @MapsId
-    @JoinColumn(name = "problem_id")
+    @JsonIgnore
+    @JoinColumn(name = "id")
     @ToString.Exclude
     private Problem problem;
 
@@ -33,6 +34,11 @@ public class Exception {
 
     public Exception(Problem problem) {
         this.problem = problem;
+    }
+
+    public void setValues(List<Value> values) {
+        values.forEach(value -> value.setException(this));
+        this.values = values;
     }
 
     @Override

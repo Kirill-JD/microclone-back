@@ -46,7 +46,7 @@ CREATE SEQUENCE sq_problem_id START WITH 1 INCREMENT BY 1;
 
 CREATE TABLE problem_item_mapping
 (
-    module_name         VARCHAR PRIMARY KEY,
+    module_name         VARCHAR,
     module_value        VARCHAR,
     problem_id          NUMBER
 );
@@ -76,7 +76,7 @@ CREATE TABLE trace
 
 CREATE TABLE exceptions
 (
-    problem_id           NUMBER PRIMARY KEY
+    id           NUMBER PRIMARY KEY
 );
 
 CREATE TABLE valuee
@@ -142,7 +142,7 @@ CREATE TABLE request
 
 CREATE TABLE request_item_mapping
 (
-    header_name          VARCHAR PRIMARY KEY,
+    header_name          VARCHAR,
     header_value         VARCHAR,
     request_id           NUMBER
 );

@@ -1,5 +1,6 @@
 package com.example.microcloneback.model.project.exception;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.Hibernate;
@@ -21,6 +22,7 @@ public class Stacktrace {
 
     @OneToOne(fetch = FetchType.LAZY)
     @MapsId
+    @JsonIgnore
     @JoinColumn(name = "value_id")
     @ToString.Exclude
     private Value value;
@@ -31,6 +33,11 @@ public class Stacktrace {
 
     public Stacktrace(Value value) {
         this.value = value;
+    }
+
+    public void setFrames(List<Frame> frames) {
+        frames.forEach(frame -> frame.setStacktrace(this));
+        this.frames = frames;
     }
 
     @Override
