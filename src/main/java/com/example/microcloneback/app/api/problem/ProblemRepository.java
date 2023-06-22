@@ -8,4 +8,5 @@ public interface ProblemRepository {
     List<Problem> findAll();
     Problem save(Problem problem);
     List<Problem> findAllProblemByProjectId(Long id);
+    Problem findProblemById(Long id);
 }

@@ -1,6 +1,7 @@
 package com.example.microcloneback.controllers;
 
 import com.example.microcloneback.app.api.problem.FindAllProblemByProjectIdInbound;
+import com.example.microcloneback.app.api.problem.FindProblemByIdInbound;
 import com.example.microcloneback.app.api.project.FindAllProjectInbound;
 import com.example.microcloneback.model.project.Problem;
 import com.example.microcloneback.model.project.Project;
@@ -23,17 +24,24 @@ public class MainController {
     private final ProblemService problemService;
     private final FindAllProjectInbound findAllProjectInbound;
     private final FindAllProblemByProjectIdInbound findAllProblemByProjectIdInbound;
+    private final FindProblemByIdInbound findProblemByIdInbound;
 
-    @GetMapping("/get_project_list/")
+    @GetMapping("/projects/")
     public ResponseEntity<List<Project>> getProjectList() {
         List<Project> projectList = findAllProjectInbound.execute();
         return ResponseEntity.status(HttpStatus.OK).body(projectList);
     }
 
-    @GetMapping("/get_problem_list/{id}/")
+    @GetMapping("/problems/{id}/")
     public ResponseEntity<List<Problem>> getProblemListById(@PathVariable("id") Long id) {
         List<Problem> problemList = findAllProblemByProjectIdInbound.execute(id);
         return ResponseEntity.status(HttpStatus.OK).body(problemList);
+    }
+
+    @GetMapping("/problem/{id}/")
+    public ResponseEntity<Problem> getProblemById(@PathVariable("id") Long id) {
+        Problem problem = findProblemByIdInbound.execute(id);
+        return ResponseEntity.status(HttpStatus.OK).body(problem);
     }
 
     @CrossOrigin(origins = "*")

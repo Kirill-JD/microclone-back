@@ -8,4 +8,5 @@ import java.util.List;
 public interface ProblemJpaRepository extends JpaRepository<Problem, Long> {
     List<Problem> findAll();
     List<Problem> findAllProblemByProjectId(Long id);
+    Problem findProblemById(Long id);
 }

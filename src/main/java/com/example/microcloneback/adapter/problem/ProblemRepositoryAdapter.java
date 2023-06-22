@@ -25,4 +25,9 @@ public class ProblemRepositoryAdapter implements ProblemRepository {
     public List<Problem> findAllProblemByProjectId(Long id) {
         return problemJpaRepository.findAllProblemByProjectId(id);
     }
+
+    @Override
+    public Problem findProblemById(Long id) {
+        return problemJpaRepository.findProblemById(id);
+    }
 }
