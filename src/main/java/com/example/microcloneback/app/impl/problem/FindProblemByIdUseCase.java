@@ -1,6 +1,6 @@
 package com.example.microcloneback.app.impl.problem;
 
-import com.example.microcloneback.app.api.problem.CreateProblemInbound;
+import com.example.microcloneback.app.api.problem.FindProblemByIdInbound;
 import com.example.microcloneback.app.api.problem.ProblemRepository;
 import com.example.microcloneback.model.project.Problem;
 import lombok.RequiredArgsConstructor;
@@ -8,10 +8,12 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class CreateProblemUseCase implements CreateProblemInbound {
+public class FindProblemByIdUseCase implements FindProblemByIdInbound {
     private final ProblemRepository problemRepository;
+
+
     @Override
-    public Problem execute(Problem problem) {
-        return problemRepository.save(problem);
+    public Problem execute(Long id) {
+        return problemRepository.findProblemById(id);
     }
 }
