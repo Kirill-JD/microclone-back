@@ -16,7 +16,12 @@ public class UserRepositoryAdapter implements UserRepository {
     }
 
     @Override
-    public void save(User user) {
-        userJpaRepository.save(user);
+    public User findFirstByEmail(String email) {
+        return userJpaRepository.findFirstByEmail(email);
+    }
+
+    @Override
+    public User save(User user) {
+        return userJpaRepository.save(user);
     }
 }

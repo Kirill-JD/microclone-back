@@ -2,7 +2,10 @@ package com.example.microcloneback.controllers;
 
 import com.example.microcloneback.app.api.problem.FindAllProblemByProjectIdInbound;
 import com.example.microcloneback.app.api.problem.FindProblemByIdInbound;
+import com.example.microcloneback.app.api.project.CreateProjectInbound;
 import com.example.microcloneback.app.api.project.FindAllProjectInbound;
+import com.example.microcloneback.app.api.user.FindUserByEmailInbound;
+import com.example.microcloneback.model.project.Platform;
 import com.example.microcloneback.model.project.Problem;
 import com.example.microcloneback.model.project.Project;
 import com.example.microcloneback.service.ProblemService;
@@ -11,9 +14,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
@@ -25,7 +32,15 @@ public class MainController {
     private final FindAllProjectInbound findAllProjectInbound;
     private final FindAllProblemByProjectIdInbound findAllProblemByProjectIdInbound;
     private final FindProblemByIdInbound findProblemByIdInbound;
+    private final FindUserByEmailInbound findUserByEmailInbound;
+    private final CreateProjectInbound createProjectInbound;
 
+
+    @PostMapping()
+    public ResponseEntity<Project> createProject() {
+
+        return ResponseEntity.status(HttpStatus.OK).body(new Project());
+    }
     @GetMapping("/projects/")
     public ResponseEntity<List<Project>> getProjectList() {
         List<Project> projectList = findAllProjectInbound.execute();
@@ -71,5 +86,19 @@ public class MainController {
         System.out.println(header);
         problemService.setProblem(header, body, projectId);
         return ResponseEntity.status(HttpStatus.OK).body("ok");
+    }
+
+    @GetMapping("/platform/")
+    public ResponseEntity<Set<String>> getPlatformSet() {
+        return ResponseEntity.status(HttpStatus.OK).body(
+                Arrays.stream(Platform.values()).map(Enum::name).collect(Collectors.toSet()));
+    }
+
+    @CrossOrigin(origins = "*")
+    @PostMapping(value = "/project/")
+    public ResponseEntity<Project> setProject(Authentication user, @RequestBody Project project) {
+        project.setUser(findUserByEmailInbound.execute(user.getName()));
+        createProjectInbound.execute(project);
+        return ResponseEntity.status(HttpStatus.OK).body(project);
     }
 }

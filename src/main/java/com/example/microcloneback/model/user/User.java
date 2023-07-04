@@ -21,9 +21,10 @@ public class User implements Serializable {
     @Serial
     private static final long serialVersionUID = -5449326074498337967L;
 
-    public User(String username, String password) {
+    public User(String username, String email, String password) {
         this.username = username;
         this.password = password;
+        this.email = email;
     }
 
     @Id
@@ -33,6 +34,7 @@ public class User implements Serializable {
 
     private String username;
     private String password;
+    private String email;
     private boolean active;
 
     @ManyToMany(fetch = FetchType.LAZY)

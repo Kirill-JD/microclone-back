@@ -37,10 +37,10 @@ public class ProblemService {
             System.out.println("//////////////////////////////////////////////////////////////////////////////////");
             System.out.println(words[2]);
             Project project = findProjectByIdInbound.execute(projectId);
-            if (project == null) {
-                project = new Project(projectId, sentryKey, sentryVersion, sentryClient);
-                createProjectInbound.execute(project);
-            }
+//            if (project == null) {
+//                project = new Project(projectId, sentryKey, sentryVersion, sentryClient);
+//                createProjectInbound.execute(project);
+//            }
             ObjectMapper objectMapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
             Problem problem = objectMapper.readValue(words[2], Problem.class);
             problem.setType(type.getString("type"));
