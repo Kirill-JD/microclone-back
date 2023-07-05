@@ -1,6 +1,7 @@
 package com.example.microcloneback.model.user;
 
 import com.example.microcloneback.model.project.Project;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,6 +30,7 @@ public class User implements Serializable {
     @SequenceGenerator(name = "users_id_generator", sequenceName = "sq_users_id", allocationSize = 1)
     private Long id;
     private String username;
+    @JsonIgnore
     private String password;
     private String email;
     private boolean active;

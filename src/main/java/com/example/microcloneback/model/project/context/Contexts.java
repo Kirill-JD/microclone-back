@@ -41,8 +41,12 @@ public class Contexts {
     }
 
     public void setContextsInParam() {
-        this.trace.setContexts(this);
-        this.runtime.setContexts(this);
+        if (this.trace != null) {
+            this.trace.setContexts(this);
+        }
+        if (this.runtime != null) {
+            this.runtime.setContexts(this);
+        }
     }
 
     @Override

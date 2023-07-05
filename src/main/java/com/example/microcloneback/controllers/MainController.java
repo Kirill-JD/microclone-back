@@ -9,8 +9,11 @@ import com.example.microcloneback.app.api.user.FindUserByEmailInbound;
 import com.example.microcloneback.model.project.Platform;
 import com.example.microcloneback.model.project.Problem;
 import com.example.microcloneback.model.project.Project;
+import com.example.microcloneback.model.user.User;
 import com.example.microcloneback.service.ProblemService;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -36,25 +39,31 @@ public class MainController {
     private final FindUserByEmailInbound findUserByEmailInbound;
     private final CreateProjectInbound createProjectInbound;
 
-
-    @PostMapping()
-    public ResponseEntity<Project> createProject() {
-
-        return ResponseEntity.status(HttpStatus.OK).body(new Project());
+    @GetMapping("/v1/user/")
+    public ResponseEntity<User> getUser(Authentication user) {
+        User user1 = findUserByEmailInbound.execute(user.getName());
+        ObjectMapper objectMapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        try {
+            user1 = objectMapper.readValue(String.format("{\"username\": \"%s\", \"email\": \"%s\"}", user1.getUsername(), user1.getEmail()), User.class);
+        } catch (JsonProcessingException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(user1);
     }
-    @GetMapping("/projects/")
+
+    @GetMapping("/v1/projects/")
     public ResponseEntity<List<Project>> getProjectList() {
         List<Project> projectList = findAllProjectInbound.execute();
         return ResponseEntity.status(HttpStatus.OK).body(projectList);
     }
 
-    @GetMapping("/problems/{id}/")
+    @GetMapping("/v1/problems/{id}/")
     public ResponseEntity<List<Problem>> getProblemListById(@PathVariable("id") Long id) {
         List<Problem> problemList = findAllProblemByProjectIdInbound.execute(id);
         return ResponseEntity.status(HttpStatus.OK).body(problemList);
     }
 
-    @GetMapping("/problem/{id}/")
+    @GetMapping("/v1/problem/{id}/")
     public ResponseEntity<Problem> getProblemById(@PathVariable("id") Long id) {
         Problem problem = findProblemByIdInbound.execute(id);
         return ResponseEntity.status(HttpStatus.OK).body(problem);
@@ -78,7 +87,7 @@ public class MainController {
     }
 
     @CrossOrigin(origins = "*")
-    @PostMapping(value = "/{project_id}/envelope/")
+    @PostMapping(value = "/v1/{project_id}/envelope/")
     public ResponseEntity<String> springSentryLog(@PathVariable("project_id") Long projectId,
                                                   @RequestHeader("x-sentry-auth") String header,
                                                   @RequestBody byte[] body) throws JsonProcessingException {
@@ -86,21 +95,21 @@ public class MainController {
         return ResponseEntity.status(HttpStatus.OK).body("ok");
     }
 
-    @GetMapping("/platform/")
+    @GetMapping("/v1/platform/")
     public ResponseEntity<Set<String>> getPlatformSet() {
         return ResponseEntity.status(HttpStatus.OK).body(
                 Arrays.stream(Platform.values()).map(Enum::name).collect(Collectors.toSet()));
     }
 
     @CrossOrigin(origins = "*")
-    @PostMapping(value = "/project/")
+    @PostMapping(value = "/v1/project/")
     public ResponseEntity<Long> setProject(Authentication user, @RequestBody Project project) {
         project.setUser(findUserByEmailInbound.execute(user.getName()));
         createProjectInbound.execute(project);
         return ResponseEntity.status(HttpStatus.OK).body(project.getId());
     }
 
-    @GetMapping("/project/{id}/")
+    @GetMapping("/v1/project/{id}/")
     public ResponseEntity<Project> getProject(@PathVariable("id") Long id) {
         return ResponseEntity.status(HttpStatus.OK).body(findProjectByIdInbound.execute(id));
     }

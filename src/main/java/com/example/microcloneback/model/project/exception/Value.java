@@ -57,7 +57,9 @@ public class Value {
     }
 
     public void setValueInParam() {
-        this.stacktrace.setValue(this);
+        if (this.stacktrace != null) {
+            this.stacktrace.setValue(this);
+        }
     }
 
     @Override

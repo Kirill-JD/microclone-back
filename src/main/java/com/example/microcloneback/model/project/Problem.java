@@ -85,10 +85,18 @@ public class Problem {
     }
 
     public void setProblemInParam() {
-        this.contexts.setProblem(this);
-        this.sdk.setProblem(this);
-        this.exception.setProblem(this);
-        this.request.setProblem(this);
+        if (this.contexts != null) {
+            this.contexts.setProblem(this);
+        }
+        if (this.sdk != null) {
+            this.sdk.setProblem(this);
+        }
+        if (this.exception != null) {
+            this.exception.setProblem(this);
+        }
+        if (this.request != null) {
+            this.request.setProblem(this);
+        }
     }
 
     @Override
