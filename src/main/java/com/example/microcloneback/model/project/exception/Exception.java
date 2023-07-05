@@ -20,7 +20,6 @@ import java.util.Objects;
 public class Exception {
     @Id
     private Long id;
-
     @OneToOne
     @MapsId
     @JsonIgnore

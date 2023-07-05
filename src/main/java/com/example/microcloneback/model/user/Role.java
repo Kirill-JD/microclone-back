@@ -1,7 +1,10 @@
 package com.example.microcloneback.model.user;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.annotations.NaturalId;
 
 import java.io.Serial;
@@ -9,7 +12,10 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "role")
-@Data
+@Getter
+@Setter
+@ToString
+@RequiredArgsConstructor
 public class Role implements Serializable {
     @Serial
     private static final long serialVersionUID = -5449326074498337967L;

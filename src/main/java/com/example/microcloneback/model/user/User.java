@@ -17,21 +17,17 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 public class User implements Serializable {
-
     @Serial
     private static final long serialVersionUID = -5449326074498337967L;
-
     public User(String username, String email, String password) {
         this.username = username;
         this.password = password;
         this.email = email;
     }
-
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "users_id_generator")
     @SequenceGenerator(name = "users_id_generator", sequenceName = "sq_users_id", allocationSize = 1)
     private Long id;
-
     private String username;
     private String password;
     private String email;

@@ -10,7 +10,6 @@ import java.util.List;
 @Repository
 @RequiredArgsConstructor
 public class ProjectRepositoryAdapter implements ProjectRepository {
-
     private final ProjectJpaRepository projectJpaRepository;
     @Override
     public List<Project> findAll() {

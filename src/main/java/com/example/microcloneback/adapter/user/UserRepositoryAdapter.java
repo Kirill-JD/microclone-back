@@ -9,7 +9,6 @@ import org.springframework.stereotype.Repository;
 @RequiredArgsConstructor
 public class UserRepositoryAdapter implements UserRepository {
     private final UserJpaRepository userJpaRepository;
-
     @Override
     public User findByUsername(String username) {
         return userJpaRepository.findByUsername(username);

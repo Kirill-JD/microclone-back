@@ -10,8 +10,6 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class FindProblemByIdUseCase implements FindProblemByIdInbound {
     private final ProblemRepository problemRepository;
-
-
     @Override
     public Problem execute(Long id) {
         return problemRepository.findProblemById(id);

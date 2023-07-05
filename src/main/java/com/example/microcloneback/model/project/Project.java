@@ -33,7 +33,6 @@ public class Project {
     private String sentry_key = UUID.randomUUID().toString().replaceAll("-", "");
     private String sentry_version;
     private String sentry_client;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "users_id")
     @OnDelete(action = OnDeleteAction.CASCADE)

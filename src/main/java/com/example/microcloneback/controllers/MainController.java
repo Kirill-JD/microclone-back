@@ -4,6 +4,7 @@ import com.example.microcloneback.app.api.problem.FindAllProblemByProjectIdInbou
 import com.example.microcloneback.app.api.problem.FindProblemByIdInbound;
 import com.example.microcloneback.app.api.project.CreateProjectInbound;
 import com.example.microcloneback.app.api.project.FindAllProjectInbound;
+import com.example.microcloneback.app.api.project.FindProjectByIdInbound;
 import com.example.microcloneback.app.api.user.FindUserByEmailInbound;
 import com.example.microcloneback.model.project.Platform;
 import com.example.microcloneback.model.project.Problem;
@@ -27,9 +28,9 @@ import java.util.stream.Collectors;
 @RequestMapping("/api")
 @RequiredArgsConstructor
 public class MainController {
-
     private final ProblemService problemService;
     private final FindAllProjectInbound findAllProjectInbound;
+    private final FindProjectByIdInbound findProjectByIdInbound;
     private final FindAllProblemByProjectIdInbound findAllProblemByProjectIdInbound;
     private final FindProblemByIdInbound findProblemByIdInbound;
     private final FindUserByEmailInbound findUserByEmailInbound;
@@ -66,7 +67,6 @@ public class MainController {
                                                @RequestParam("sentry_version") String sentryVersion,
                                                @RequestParam("sentry_client") String sentryClient,
                                                @RequestBody String body) {
-        System.out.println("------------------------------------ start ------------------------------------");
         System.out.println(body);
         System.out.println("sentryKey: " + sentryKey + "; sentryVersion: " + sentryVersion + "; sentryClient: " + sentryClient);
         try {
@@ -82,8 +82,6 @@ public class MainController {
     public ResponseEntity<String> springSentryLog(@PathVariable("project_id") Long projectId,
                                                   @RequestHeader("x-sentry-auth") String header,
                                                   @RequestBody byte[] body) throws JsonProcessingException {
-        System.out.println("------------------------------------ start ------------------------------------");
-        System.out.println(header);
         problemService.setProblem(header, body, projectId);
         return ResponseEntity.status(HttpStatus.OK).body("ok");
     }
@@ -96,9 +94,14 @@ public class MainController {
 
     @CrossOrigin(origins = "*")
     @PostMapping(value = "/project/")
-    public ResponseEntity<Project> setProject(Authentication user, @RequestBody Project project) {
+    public ResponseEntity<Long> setProject(Authentication user, @RequestBody Project project) {
         project.setUser(findUserByEmailInbound.execute(user.getName()));
         createProjectInbound.execute(project);
-        return ResponseEntity.status(HttpStatus.OK).body(project);
+        return ResponseEntity.status(HttpStatus.OK).body(project.getId());
+    }
+
+    @GetMapping("/project/{id}/")
+    public ResponseEntity<Project> getProject(@PathVariable("id") Long id) {
+        return ResponseEntity.status(HttpStatus.OK).body(findProjectByIdInbound.execute(id));
     }
 }
