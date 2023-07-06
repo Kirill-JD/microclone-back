@@ -87,7 +87,7 @@ public class MainController {
     }
 
     @CrossOrigin(origins = "*")
-    @PostMapping(value = "/v1/{project_id}/envelope/")
+    @PostMapping(value = "/{project_id}/envelope/")
     public ResponseEntity<String> springSentryLog(@PathVariable("project_id") Long projectId,
                                                   @RequestHeader("x-sentry-auth") String header,
                                                   @RequestBody byte[] body) throws JsonProcessingException {
